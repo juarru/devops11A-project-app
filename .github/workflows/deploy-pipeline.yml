@@ -88,6 +88,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh jq
+
       - name: Get workflow status
         id: get_status
         run: echo "status=${{ needs.build_push_image.result }}" >> $GITHUB_OUTPUT
@@ -96,18 +101,21 @@ jobs:
         id: changelog
         run: |
           RELEASE_NOTES=$(gh release view --json body -q ".body")
-          echo "notes<<EOF" >> $GITHUB_OUTPUT
-          echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          ESCAPED_NOTES=$(echo "$RELEASE_NOTES" | jq -Rs .)
+          echo "notes=$ESCAPED_NOTES" >> $GITHUB_OUTPUT
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Send Slack notification
-        uses: slackapi/slack-github-action@v1.25.0
-        with:
-          payload: |
-            {
-              "text": "*[Deploy Pipeline]*\n*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}\n*Status:* ${{ steps.get_status.outputs.status }}\n\n*Changelog:*\n${{ steps.changelog.outputs.notes }}"
-            }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_DEPLOY_WEBHOOK_URL }}
+        run: |
+          payload=$(jq -n \
+            --arg repo "${{ github.repository }}" \
+            --arg branch "${{ github.ref_name }}" \
+            --arg status "${{ steps.get_status.outputs.status }}" \
+            --arg changelog "${{ steps.changelog.outputs.notes }}" \
+            '{
+              text: "*[Deploy Pipeline]*\n*Repository:* \($repo)\n*Branch:* \($branch)\n*Status:* \($status)\n\n*Changelog:*\n\($changelog)"
+            }')
+          curl -X POST -H 'Content-type: application/json' --data "$payload" $SLACK_WEBHOOK_URL
