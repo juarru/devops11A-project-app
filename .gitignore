@@ -1,0 +1,65 @@
+# Bytecode de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos de entorno virtual
+venv/
+.env
+.venv/
+env/
+ENV/
+*.venv
+
+# Archivos de configuración y dependencias locales
+*.log
+*.sqlite3
+instance/
+config.py
+*.db
+*.pid
+
+# Archivos de caché y compilados
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.manifest
+pip-log.txt
+pip-delete-this-directory.txt
+__pycache__
+.pytest_cache
+.coverage
+
+# Archivos específicos de macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Archivos de Redis
+dump.rdb
+*.aof
+appendonly.aof
+
+# Archivos generados por IDEs/editores
+.idea/
+#.vscode/
+*.swp
+*.swo
+
+# Archivos de cobertura de código
+.coverage
+htmlcov/
+.coverage.*
+
+# Archivos de CircleCI y análisis estático
+.circleci/cache/
+sonarqube-out/
+reports/
+test-reports/

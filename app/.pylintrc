@@ -1,0 +1,30 @@
+[MASTER]
+# Allows ignoring some files or directories
+ignore=venv,migrations,tests
+
+[MESSAGES CONTROL]
+# Disables some rules that may be unnecessary in Flask projects
+disable=
+    missing-docstring,  # Does not require docstrings in all functions
+    import-error,  # Avoids import errors if the environment is not fully configured
+    too-few-public-methods,  # Allows classes with few functions
+    logging-fstring-interpolation,  # Allows using f-strings in logs
+    invalid-name  # Does not enforce variable names in specific formats
+
+[FORMAT]
+# Maximum line length (adjust according to your preferences)
+max-line-length=100
+
+# Spaces required for indentation
+indent-string='    '
+indent-after-paren=4
+
+[DESIGN]
+# Maximum number of arguments allowed in a function
+max-args=6
+# Maximum number of attributes in a class
+max-attributes=10
+
+[REPORTS]
+# Do not show final pylint score
+score=no
