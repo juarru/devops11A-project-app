@@ -3,10 +3,10 @@ name: Deploy Pipeline
 on:
     pull_request:
       branches:
-        - 'main'
+        - main
     push:
       branches:
-        - 'main'
+        - main
 
 env:
   PYTHON_VERSION: '3.10'
