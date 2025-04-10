@@ -9,7 +9,8 @@ disable=
     import-error,  # Avoids import errors if the environment is not fully configured
     too-few-public-methods,  # Allows classes with few functions
     logging-fstring-interpolation,  # Allows using f-strings in logs
-    invalid-name  # Does not enforce variable names in specific formats
+    invalid-name,  # Does not enforce variable names in specific formats
+    broad-exception-caught
 
 [FORMAT]
 # Maximum line length (adjust according to your preferences)

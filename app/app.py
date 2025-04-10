@@ -1,11 +1,11 @@
+import json
 import logging
 import os
-from flask import Flask, jsonify
-import redis
-import json
 import time
-from elasticsearch import Elasticsearch
 from datetime import datetime
+import redis
+from elasticsearch import Elasticsearch
+from flask import Flask, jsonify
 from prometheus_client import Counter
 
 app = Flask(__name__)
@@ -44,7 +44,10 @@ es = Elasticsearch(f"http://{ELASTICSEARCH_HOST}:9200")
 
 # Prometheus metrics
 REQUESTS = Counter('server_requests_total', 'Total number of requests to this webserver')
-HEALTHCHECK_REQUESTS = Counter('healthcheck_requests_total', 'Total number of requests to healthcheck')
+HEALTHCHECK_REQUESTS = Counter(
+    'healthcheck_requests_total',
+    'Total number of requests to healthcheck'
+)
 MAIN_ENDPOINT_REQUESTS = Counter('main_requests_total', 'Total number of requests to main endpoint')
 LOGS_ENDPOINT_REQUESTS = Counter('logs_requests_total', 'Total number of requests to logs endpoint')
 
@@ -106,11 +109,12 @@ def health_check():
 
         REQUESTS.inc()
         HEALTHCHECK_REQUESTS.inc()
+
+        return {"health": "ok"}
     except Exception as e:
         logger.error(f"Error de llamada a health: {e}")
         return jsonify({"error": str(e)}), 500
-    
-    return {"health": "ok"}
+
 
 @app.route('/logs', methods=['GET'])
 def get_logs():
