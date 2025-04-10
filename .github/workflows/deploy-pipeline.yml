@@ -98,24 +98,22 @@ jobs:
         run: echo "status=${{ needs.build_push_image.result }}" >> $GITHUB_OUTPUT
 
       - name: Extract changelog from latest release
-        id: changelog
         run: |
-          RELEASE_NOTES=$(gh release view --json body -q ".body")
-          ESCAPED_NOTES=$(echo "$RELEASE_NOTES" | jq -Rs .)
-          echo "notes=$ESCAPED_NOTES" >> $GITHUB_OUTPUT
+          gh release view --json body -q ".body" > changelog.txt
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+  
       - name: Send Slack notification
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_DEPLOY_WEBHOOK_URL }}
         run: |
+          changelog=$(jq -Rs . < changelog.txt)
           payload=$(jq -n \
             --arg repo "${{ github.repository }}" \
             --arg branch "${{ github.ref_name }}" \
-            --arg status "${{ steps.get_status.outputs.status }}" \
-            --argjson changelog "${{ steps.changelog.outputs.notes }}" \
+            --arg status "${{ needs.build_push_image.result }}" \
+            --arg changelog "$changelog" \
             '{
               text: "*[Deploy Pipeline]*\n*Repository:* \($repo)\n*Branch:* \($branch)\n*Status:* \($status)\n\n*Changelog:*\n\($changelog)"
             }')
-          curl -X POST -H 'Content-type: application/json' --data "$payload" $SLACK_WEBHOOK_URL
+          curl -X POST -H 'Content-type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
