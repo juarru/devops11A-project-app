@@ -3,3 +3,4 @@ redis
 pytest
 pytest-cov
 pylint
+elasticsearch==8.10.0
