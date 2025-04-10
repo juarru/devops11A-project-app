@@ -99,7 +99,7 @@ jobs:
 
       - name: Extract changelog from latest release
         run: |
-          gh release view --json body -q ".body" | jq -r > changelog.txt
+          gh release view --json body -q ".body" > changelog.txt
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
@@ -107,10 +107,16 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_DEPLOY_WEBHOOK_URL }}
         run: |
-          changelog=$(sed 's/^* /• /' changelog.txt | sed 's/"/\\"/g')
+          if [ "${{ needs.build_push_image.result }}" == "success" ]; then
+            status_emoji="✅"
+          else
+            status_emoji="❌"
+          fi
+
+          changelog=$(sed 's/^\* /• /' changelog.txt | sed 's/"/\\"/g')
 
           payload="{
-            \"text\": \"*[Deploy Pipeline]*\\n*Repository:* ${{ github.repository }}\\n*Branch:* ${{ github.ref_name }}\\n*Status:* ${{ needs.build_push_image.result }}\\n\\n*Changelog:*\\n$changelog\"
+            \"text\": \"$status_emoji *[Deploy Pipeline]*\\n*Repository:* ${{ github.repository }}\\n*Branch:* ${{ github.ref_name }}\\n*Status:* ${{ needs.build_push_image.result }}\\n\\n*Changelog:*\\n$changelog\"
           }"
 
           curl -X POST -H 'Content-type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
