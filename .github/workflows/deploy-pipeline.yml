@@ -79,3 +79,35 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+
+  notify_slack:
+    runs-on: ubuntu-latest
+    needs: build_push_image
+    if: always()
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get workflow status
+        id: get_status
+        run: echo "status=${{ needs.build_push_image.result }}" >> $GITHUB_OUTPUT
+
+      - name: Extract changelog from latest release
+        id: changelog
+        run: |
+          RELEASE_NOTES=$(gh release view --json body -q ".body")
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Send Slack notification
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "text": "*[Deploy Pipeline]*\n*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}\n*Status:* ${{ steps.get_status.outputs.status }}\n\n*Changelog:*\n${{ steps.changelog.outputs.notes }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_DEPLOY_WEBHOOK_URL }}
