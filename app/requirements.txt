@@ -3,3 +3,5 @@ redis
 pytest
 pytest-cov
 pylint
+elasticsearch
+prometheus-client
