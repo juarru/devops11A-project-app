@@ -114,7 +114,7 @@ jobs:
             --arg repo "${{ github.repository }}" \
             --arg branch "${{ github.ref_name }}" \
             --arg status "${{ steps.get_status.outputs.status }}" \
-            --arg changelog "${{ steps.changelog.outputs.notes }}" \
+            --argjson changelog "${{ steps.changelog.outputs.notes }}" \
             '{
               text: "*[Deploy Pipeline]*\n*Repository:* \($repo)\n*Branch:* \($branch)\n*Status:* \($status)\n\n*Changelog:*\n\($changelog)"
             }')
