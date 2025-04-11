@@ -8,7 +8,9 @@ from elasticsearch import Elasticsearch
 from flask import Flask, jsonify
 from prometheus_client import Counter
 
+
 app = Flask(__name__)
+
 
 class JsonFormatter(logging.Formatter):
     def format(self, record):
@@ -22,13 +24,14 @@ class JsonFormatter(logging.Formatter):
             log_record["exception"] = self.formatException(record.exc_info)
         return json.dumps(log_record)
 
+
 # Configuración del logger
 logger = logging.getLogger("jsonLogger")
-
 handler = logging.StreamHandler()
 handler.setFormatter(JsonFormatter())
 logger.addHandler(handler)
 logger.setLevel(logging.INFO)
+
 
 # Redis Configuration
 REDIS_HOST = os.getenv("REDIS_HOST", "redis")
@@ -36,23 +39,34 @@ REDIS_PORT = 6379
 REDIS_DB = int(os.getenv("REDIS_DB", "0"))
 
 # Redis connection
-db = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB, decode_responses=True)
+db = redis.Redis(
+    host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB, decode_responses=True
+)
+
 
 # Elasticsearch configuration
 ELASTICSEARCH_HOST = os.getenv('ELASTICSEARCH_HOST', 'elasticsearch')
 es = Elasticsearch(f"http://{ELASTICSEARCH_HOST}:9200")
 
+
 # Prometheus metrics
-REQUESTS = Counter('server_requests_total', 'Total number of requests to this webserver')
+REQUESTS = Counter(
+    'server_requests_total', 'Total number of requests to this webserver'
+)
 HEALTHCHECK_REQUESTS = Counter(
     'healthcheck_requests_total',
     'Total number of requests to healthcheck'
 )
-MAIN_ENDPOINT_REQUESTS = Counter('main_requests_total', 'Total number of requests to main endpoint')
-LOGS_ENDPOINT_REQUESTS = Counter('logs_requests_total', 'Total number of requests to logs endpoint')
+MAIN_ENDPOINT_REQUESTS = Counter(
+    'main_requests_total', 'Total number of requests to main endpoint'
+)
+LOGS_ENDPOINT_REQUESTS = Counter(
+    'logs_requests_total', 'Total number of requests to logs endpoint'
+)
 
 # Error: Uncomment to see how pylint works.
 # x = "This variable has a very short name"
+
 
 def get_hit_count():
     retries = 5
@@ -64,6 +78,7 @@ def get_hit_count():
                 raise exc
             retries -= 1
             time.sleep(0.5)
+
 
 @app.route('/')
 def index():
@@ -89,8 +104,8 @@ def index():
         logger.error(f"Error al almacenar en Elasticsearch: {e}")
         return jsonify({"error": str(e)}), 500
 
-
     return f"La página ha sido cargada {count} veces."
+
 
 @app.route("/health", methods=["GET"])
 def health_check():
@@ -122,7 +137,9 @@ def get_logs():
     Recupera los datos almacenados en Elasticsearch.
     """
     try:
-        response = es.search(index=["flask-logs", "health-logs"], query={"match_all": {}})
+        response = es.search(
+            index=["flask-logs", "health-logs"], query={"match_all": {}}
+        )
         hits = response.get("hits", {}).get("hits", [])
         logs = [hit["_source"] for hit in hits]
         logger.info("Datos recuperados desde Elasticsearch")
@@ -134,6 +151,7 @@ def get_logs():
     except Exception as e:
         logger.error(f"Error al recuperar datos desde Elasticsearch: {e}")
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
