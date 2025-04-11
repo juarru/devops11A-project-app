@@ -1,11 +1,16 @@
 # Usar una imagen base de Python
 FROM python:3.7-alpine
 
+RUN apk add --no-cache \
+    git \
+    && pip install --upgrade pip
+
 # Establecer el directorio de trabajo
 WORKDIR /app
 
 # Copiar los archivos de la aplicación
-COPY app/ /app
+COPY app/ /app 
+COPY requirements.txt /app/requirements.txt
 
 # Instalar dependencias
 RUN pip install --no-cache-dir -r requirements.txt
@@ -14,4 +19,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000
 
 # Comando por defecto
-CMD ["python", "app.py"]
+CMD ["python", "app/app.py"]
