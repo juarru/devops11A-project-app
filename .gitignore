@@ -57,6 +57,7 @@ appendonly.aof
 .coverage
 htmlcov/
 .coverage.*
+coverage.xml
 
 # Archivos de CircleCI y análisis estático
 .circleci/cache/
