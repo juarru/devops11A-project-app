@@ -15,14 +15,14 @@ def client():
     with app.test_client() as client:
         yield client
 
-
 def test_index_success(client):
     """Successful test: Verifies that the route '/' responds with
     status code 200
     """
-    response = client.get("/")
-    assert response.status_code == 200
-    assert "La página ha sido cargada" in response.get_data(as_text=True)
+    with patch("app.es.index", return_value={"result": "created"}):
+        response = client.get("/")
+        assert response.status_code == 200
+        assert "La página ha sido cargada" in response.get_data(as_text=True)
 
 
 def test_index_exception(client):
@@ -39,13 +39,13 @@ def test_not_found(client):
     response = client.get("/notfound")
     assert response.status_code == 404
 
-
 def test_health_success(client):
     """Successful test: Verifies that the route '/health' responds with
     status code 200
     """
-    response = client.get("/health")
-    assert response.status_code == 200
+    with patch("app.es.index", return_value={"result": "created"}):
+        response = client.get("/health")
+        assert response.status_code == 200
 
 
 def test_health_exception(client):
@@ -61,8 +61,9 @@ def test_logs_success(client):
     """Successful test: Verifies that the route '/logs' responds with
     status code 200
     """
-    response = client.get("/logs")
-    assert response.status_code == 200
+    with patch("app.es.search", return_value={"hits": {"total": 1}}):
+        response = client.get("/logs")
+        assert response.status_code == 200
 
 
 def test_logs_exception(client):
