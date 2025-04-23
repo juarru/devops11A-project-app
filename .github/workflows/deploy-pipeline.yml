@@ -106,7 +106,6 @@ jobs:
             python -m venv venv
             source venv/bin/activate
             pip install -r requirements.txt  
-            pip install --upgrade pytest-cov coverage
 
       - name: Run tests
         run: |
@@ -117,7 +116,6 @@ jobs:
         run: |
           source venv/bin/activate
           pytest --cov=app --cov-report=xml app/test_app.py
-          coverage xml --report-relative-files
 
       - name: Save coverage report
         uses: actions/upload-artifact@v4
@@ -152,7 +150,7 @@ jobs:
       - name: Run SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         with:
-          projectBaseDir: .
+          projectBaseDir: app
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
