@@ -117,6 +117,12 @@ jobs:
           source venv/bin/activate
           pytest --cov=app --cov-report=xml app/test_app.py
 
+      - name: Save coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
+
   sonarqube_analysis:
     name: SonarCloud Scan
     runs-on: ubuntu-latest
@@ -135,6 +141,11 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
+
+      - name: Download coverage report
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-report
 
       - name: Run SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
