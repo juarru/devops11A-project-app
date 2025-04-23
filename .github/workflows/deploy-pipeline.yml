@@ -51,6 +51,8 @@ jobs:
 
       - name: Scan code for secrets
         run: ggshield secret scan repo .
+        env:
+          GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
 
   linting_action:
     runs-on: ubuntu-latest
