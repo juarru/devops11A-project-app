@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   lint:
     docker:
-      - image: cimg/python:3.9  # Puedes ajustar la versión según lo que necesites.
+      - image: cimg/python:3.9
     steps:
       - checkout
       - run:
@@ -17,12 +17,55 @@ jobs:
       - run:
           name: Ejecutar Linting con flake8
           command: flake8 .
+  test:
+    docker:
+      - image: cimg/python:3.9
+        environment:
+          ELASTICSEARCH_HOST: "elasticsearch"
+      - image: docker.elastic.co/elasticsearch/elasticsearch:8.5.0
+        name: elasticsearch
+        environment:
+          discovery.type: "single-node"
+          xpack.security.enabled: "false"
+    steps:
+      - checkout
+      - run:
+          name: Instalar dependencias y Coverage
+          command: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+            pip install coverage
+      - run:
+          name: Esperar a que Elasticsearch se inicie
+          command: |
+            # Espera hasta que Elasticsearch responda en el puerto 9200
+            until curl --fail http://elasticsearch:9200; do
+              echo "Esperando a que Elasticsearch se inicie..."
+              sleep 5
+            done
+      - run:
+          name: Ejecutar tests con pytest y generar cobertura
+          command: |
+            coverage run -m pytest
+            coverage report --fail-under=80
+      - run:
+          name: Generar reporte XML de cobertura
+          command: coverage xml
+      - store_artifacts:
+          path: coverage.xml
+          destination: coverage
           
 workflows:
   version: 2
-  linting:
+  build_and_test:
     jobs:
       - lint:
+          filters:
+            branches:
+              only: dev
+      - test:
+          requires:
+            - lint
           filters:
             branches:
               only: dev
