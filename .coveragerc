@@ -1,5 +1,5 @@
 [run]
-source = app
+source = .
 
 [report]
 omit = app/test_*.py
