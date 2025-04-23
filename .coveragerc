@@ -1,0 +1,10 @@
+[run]
+source = app
+
+[report]
+omit = app/test_*.py
+
+[paths]
+source =
+    app
+    */app
