@@ -15,6 +15,7 @@ def client():
     with app.test_client() as client:
         yield client
 
+
 def test_index_success(client):
     """Successful test: Verifies that the route '/' responds with
     status code 200
@@ -38,6 +39,7 @@ def test_not_found(client):
     """Failed test: Tries to access a non-existent route"""
     response = client.get("/notfound")
     assert response.status_code == 404
+    
 
 def test_health_success(client):
     """Successful test: Verifies that the route '/health' responds with
