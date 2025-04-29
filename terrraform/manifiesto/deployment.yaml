@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flaskapp
+  labels:
+    app: flask 
+spec:
+  replicas: 3  # Inicialmente 3 réplicas
+  selector:
+    matchLabels:
+      app: flask 
+  template:
+    metadata:
+      labels:
+        app: flask 
+    spec:
+      containers:
+      - name: flask-app
+        image: ghcr.io/juarru/devops11a-project-app:main  # IMAGEN ACTUALIZADA AQUÍ
+        ports:
+        - containerPort: 5000
+          name: http
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        env:
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: flask-secrets
+              key: secret-key
+        - name: REDIS_HOST
+          value: "localhost"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: FLASK_APP
+          value: "app.app"
+        - name: FLASK_ENV
+          value: "production"
+        - name: FLASK_RUN_HOST
+          value: "0.0.0.0"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/app/app/config.py
+          subPath: config.py
+      - name: redis
+        image: redis:latest
+        ports:
+        - containerPort: 6379
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+      volumes:
+      - name: config-volume
+        configMap:
+          name: flask-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flaskservice
+  labels:
+    app: flask
+spec:
+  selector:
+    app: flask
+  ports:
+    - port: 80
+      targetPort: 5000
+      name: http
+  type: ClusterIP
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: flask-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: flaskapp
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 60
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
