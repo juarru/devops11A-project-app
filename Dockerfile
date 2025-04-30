@@ -18,5 +18,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Exponer el puerto 5000
 EXPOSE 5000
 
+ENV FLASK_APP_PATH=app.py
+
 # Comando por defecto
-CMD ["python", "app/app.py"]
+CMD ["sh", "-c", "python $FLASK_APP_PATH"]
