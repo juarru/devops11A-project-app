@@ -20,7 +20,7 @@ variable "zones" {
 variable "cluster_name" {
   description = "Nombre del cluster GKE"
   type        = string
-  default     = "argocd-cluster"
+  default     = "Entrega-FinalDevOps-11"
 }
 
 variable "network" {

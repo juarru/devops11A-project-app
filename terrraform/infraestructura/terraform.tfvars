@@ -1,7 +1,7 @@
 project_id           = "despliegue-458304"
 region               = "europe-southwest1"
 zones                = ["europe-southwest1-a", "europe-southwest1-b", "europe-southwest1-c"]
-cluster_name         = "argocd-cluster"
+cluster_name         = "Entrega-Final-DevOps11"
 network              = "default"
 subnetwork           = "default"
 ip_range_pods        = ""
