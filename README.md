@@ -36,6 +36,7 @@ A su vez genera las releases, los changelogs y los artefactos en cada mergeo a l
 ├── .github/workflows/               # Workflows de GitHub Actions  
 │   ├── delete-branch.yml            # Workflow para eliminar ramas después de merge a dev  
 │   ├── deploy-pipeline.yml          # Workflow para ejecutar el despliegue de la rama main y creación de la imagen de la aplicación.  
+│   ├── push-branch.yml              # Workflow para ejecutar checks al subir commits a una rama que no sea dev o main.
 │  
 ├── .vscode/                         # Configuración de VS Code  
 │   ├── tasks.json                   # Tareas automatizadas para el desarrollo  
