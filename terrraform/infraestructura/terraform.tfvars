@@ -1,12 +1,12 @@
 project_id           = "despliegue-458304"
-region               = "europe-southwest1"
-zones                = ["europe-southwest1-a", "europe-southwest1-b", "europe-southwest1-c"]
-cluster_name         = "Entrega-Final-DevOps11"
+region               = "europe-west4"
+zones                = ["europe-west4-a"]
+cluster_name         = "despliegue-final-cluster"
 network              = "default"
 subnetwork           = "default"
 ip_range_pods        = ""
 ip_range_services    = ""
-machine_type         = "e2-standard-2"
+machine_type         = "e2-standard-8"
 min_node_count       = 1
 max_node_count       = 3
 disk_size_gb         = 100

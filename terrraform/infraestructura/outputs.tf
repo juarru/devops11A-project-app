@@ -33,3 +33,17 @@ resource "local_file" "kubeconfig" {
   })
   filename = "${path.module}/kubeconfig"
 }
+
+output "kubernetes_endpoint" {
+  description = "Endpoint GKE"
+  value       = module.gke.endpoint
+  sensitive   = true
+}
+
+output "argocd_ip" {
+  description = "IP externa de ArgoCD"
+  value       = data.kubernetes_service.argocd_server.status.0.load_balancer.0.ingress.0.ip
+}
+
+
+

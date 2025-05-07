@@ -10,7 +10,7 @@ data "google_container_cluster" "my_cluster" {
   name     = var.cluster_name
   location = var.region
   project  = var.project_id
-  deletion_protection  = false
+  
 }
 
 # Configurar el proveedor de Kubernetes usando credenciales directas

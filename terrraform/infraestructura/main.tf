@@ -1,24 +1,4 @@
-// Configurar el proveedor de Google Cloud
-provider "google" {
-  project = var.project_id
-  region  = var.region
-}
 
-// Configurar el proveedor de Google Kubernetes Engine
-provider "kubernetes" {
-  host                   = "https://${module.gke.endpoint}"
-  token                  = data.google_client_config.default.access_token
-  cluster_ca_certificate = base64decode(module.gke.ca_certificate)
-}
-
-// Configurar el proveedor de Helm para instalar Argo CD
-provider "helm" {
-  kubernetes {
-    host                   = "https://${module.gke.endpoint}"
-    token                  = data.google_client_config.default.access_token
-    cluster_ca_certificate = base64decode(module.gke.ca_certificate)
-  }
-}
 
 // Obtener información de la configuración del cliente de Google
 data "google_client_config" "default" {}
@@ -43,7 +23,7 @@ module "gke" {
 
   node_pools = [
     {
-      name               = "default-node-pool"
+      name               = "general-node-pool"
       machine_type       = var.machine_type
       min_count          = var.min_node_count
       max_count          = var.max_node_count
@@ -84,6 +64,7 @@ resource "helm_release" "argocd" {
   depends_on = [kubernetes_namespace.argocd]
 }
 
+
 // Crear el namespace para la aplicación
 resource "kubernetes_namespace" "app_namespace" {
   metadata {
@@ -101,4 +82,13 @@ data "kubernetes_service" "argocd_server" {
   }
 
   depends_on = [helm_release.argocd]
+}
+
+// Crear namespace para Kafka
+resource "kubernetes_namespace" "kafka_system" {
+  metadata {
+    name = "kafka-system"
+  }
+
+  depends_on = [module.gke]
 }

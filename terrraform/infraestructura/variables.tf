@@ -8,19 +8,19 @@ variable "project_id" {
 variable "region" {
   description = "Región de Google Cloud"
   type        = string
-  default     = "europe-southwest1"
+  default     = "europe-west4"
 }
 
 variable "zones" {
   description = "Zonas para desplegar los nodos del cluster"
   type        = list(string)
-  default     = ["europe-southwest1-a", "europe-southwest1-b", "europe-southwest1-c"]
+  default     = ["europe-west4-a"]
 }
 
 variable "cluster_name" {
   description = "Nombre del cluster GKE"
   type        = string
-  default     = "Entrega-FinalDevOps-11"
+  default     = "despliegue-final-cluster"
 }
 
 variable "network" {
@@ -50,7 +50,7 @@ variable "ip_range_services" {
 variable "machine_type" {
   description = "Tipo de máquina para los nodos"
   type        = string
-  default     = "e2-standard-2"
+  default     = "e2-standard-8"
 }
 
 variable "min_node_count" {
@@ -91,5 +91,6 @@ variable "argocd_chart_version" {
 variable "app_namespace" {
   description = "Namespace para la aplicación gestionada por ArgoCD"
   type        = string
-  default     = "mi-aplicacion"
+  default     = "torcal-ml"
 }
+

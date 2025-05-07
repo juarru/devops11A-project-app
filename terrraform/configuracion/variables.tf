@@ -23,7 +23,7 @@ variable "app_name" {
 variable "app_namespace" {
   description = "Namespace para la aplicación"
   type        = string
-  default     = "mi-aplicacion"
+  default     = "despliegue-final-ns"
 }
 
 variable "repo_url" {
@@ -46,5 +46,5 @@ variable "repo_path" {
 variable "cluster_name" {
   description = "Nombre del clúster GKE"
   type        = string
-  default     = "argocd-cluster"
+  default     = "despliegue-final-cluster"
 }

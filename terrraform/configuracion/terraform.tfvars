@@ -1,7 +1,8 @@
 project_id     = "despliegue-458304"
-region         = "europe-southwest1"
+region         = "europe-west4"
 app_name       = "mi-aplicacion"
-app_namespace  = "mi-aplicacion"
-repo_url       = "https://github.com/juarru/devops11a-project-local-deploy'" 
+app_namespace  = "despliegue-final-ns"
+repo_url       = "https://github.com/IsaacAM50/devops11-final-manifest" 
 repo_revision  = "main"
-repo_path      = "k8s"
+repo_path      = "manifests"
+
