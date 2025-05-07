@@ -116,7 +116,7 @@ Namespace para la aplicación
 Namespace para Kafka (opcional)
 
 Para desplegar la infraestructura:
-## Navegar al directorio de infraestructura
+- Navegar al directorio de infraestructura
 ```bash
 cd terraform/infraestructura
 ```
