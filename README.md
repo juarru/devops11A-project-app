@@ -75,7 +75,7 @@ A su vez genera las releases, los changelogs y los artefactos en cada mergeo a l
 - [*Git*](https://git-scm.com/)
 - [*Terraform*](https://www.terraform.io/downloads.html)
 - Una cuenta en *Google Cloud*
-- [*kubectl*] (https://kubernetes.io/es/docs/tasks/tools/)
+- [*kubectl*](https://kubernetes.io/es/docs/tasks/tools/)
 
 ## Configuración y ejecución local
 
@@ -120,15 +120,15 @@ Para desplegar la infraestructura:
 ```bash
 cd terraform/infraestructura
 ```
-Inicializar Terraform
+- Inicializar Terraform
 ```bash
 terraform init
 ```
-Ver los cambios que se aplicarán
+- Ver los cambios que se aplicarán
 ```bash
 terraform plan
 ```
-Aplicar los cambios
+- Aplicar los cambios
 ```bash
 terraform apply
 ```
@@ -141,43 +141,43 @@ Navegar al directorio de configuración
 ```bash
 cd terraform/configuracion
 ```
-Inicializar Terraform
+- Inicializar Terraform
 ```bash
 terraform init
 ```
-## Ver los cambios que se aplicarán
+- Ver los cambios que se aplicarán
 ```bash
 terraform plan
 ```
-## Aplicar los cambios
+- Aplicar los cambios
 ```bash
 terraform apply
 ```
-Instrucciones de despliegue
+- Instrucciones de despliegue
 
 Preparar el entorno:
-## Configurar Google Cloud CLI
+- Configurar Google Cloud CLI
 ```bash
 gcloud auth login
 gcloud config set project despliegue-458304
 ```
 
-Desplegar la infraestructura:
+- Desplegar la infraestructura:
 ```bash
 cd terraform/infraestructura
 terraform init
 terraform apply
 ```
 Configurar kubectl:
-## Usar el archivo kubeconfig generado
+- Usar el archivo kubeconfig generado
 ```bash
 export KUBECONFIG=$(pwd)/kubeconfig
 ```
-## Verificar la conexión
+- Verificar la conexión
 ```bash
 kubectl get nodes
 ```
-Configurar el despliegue con ArgoCD:
+- Configurar el despliegue con ArgoCD:
 
 ```bash
 cd ../configuracion
@@ -185,14 +185,14 @@ terraform init
 terraform apply
 ```
 Acceder a ArgoCD:
-## Obtener la IP de ArgoCD
+- Obtener la IP de ArgoCD
 ```bash
 kubectl get svc -n argocd argocd-server
 ```
-## Acceder vía navegador: https://<ARGOCD_IP>
+- Acceder vía navegador: https://<ARGOCD_IP>
 
 Verificar el despliegue:
-## Verificar pods de la aplicación
+- Verificar pods de la aplicación
 ```bash
 kubectl get pods -n despliegue-final-ns
 ```
