@@ -75,6 +75,7 @@ A su vez genera las releases, los changelogs y los artefactos en cada mergeo a l
 - [*Git*](https://git-scm.com/)
 - [*Terraform*](https://www.terraform.io/downloads.html)
 - Una cuenta en *Google Cloud*
+- [*kubectl*] (https://kubernetes.io/es/docs/tasks/tools/)
 
 ## Configuración y ejecución local
 
@@ -115,7 +116,7 @@ Namespace para la aplicación
 Namespace para Kafka (opcional)
 
 Para desplegar la infraestructura:
-# Navegar al directorio de infraestructura
+## Navegar al directorio de infraestructura
 ```bash
 cd terraform/infraestructura
 ```
