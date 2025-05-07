@@ -102,48 +102,9 @@ docker-composer up -build
 docker-compose down
 ```
 
-## Despliegue en Google Cloud
+# Despliegue en Google Cloud
 
-Despliegue en Google Cloud
-Para realizar el despliegue en Google Cloud, primero necesitarás instalar algunas herramientas esenciales:
-Requisitos previos
-
-Google Cloud SDK:
-
-Herramienta de línea de comandos para interactuar con Google Cloud
-Descargar e instalar Google Cloud SDK
-
-
-Terraform:
-
-Herramienta de infraestructura como código
-Descargar e instalar Terraform
-
-
-kubectl:
-
-Herramienta de línea de comandos para Kubernetes
-Puedes instalarlo con Google Cloud SDK: gcloud components install kubectl
-
-
-Cuenta en Google Cloud Platform:
-
-Necesitarás una cuenta con facturación activada
-Tener habilitadas las APIs necesarias:
-
-Kubernetes Engine API
-Container Registry API
-
-
-
-
-Permisos IAM adecuados:
-
-Rol Kubernetes Engine Admin
-Rol Service Account User
-
-
-
+El despliegue en Google Cloud se realiza mediante Terraform y se divide en dos etapas: infraestructura y configuración. Este enfoque permite una separación clara de responsabilidades, donde primero se crea la infraestructura básica y luego se configura la aplicación a desplegar.
 Infraestructura
 La etapa de infraestructura crea los siguientes recursos:
 
@@ -151,65 +112,88 @@ Cluster GKE (Google Kubernetes Engine)
 Namespace para ArgoCD
 Instalación de ArgoCD mediante Helm
 Namespace para la aplicación
+Namespace para Kafka (opcional)
 
 Para desplegar la infraestructura:
-bash# Navegar al directorio de infraestructura
+# Navegar al directorio de infraestructura
+```bash
 cd terraform/infraestructura
-
-# Inicializar Terraform
+```
+Inicializar Terraform
+```bash
 terraform init
-
-# Ver los cambios que se aplicarán
+```
+Ver los cambios que se aplicarán
+```bash
 terraform plan
-
-# Aplicar los cambios
+```
+Aplicar los cambios
+```bash
 terraform apply
+```
+
 Después del despliegue, se generará un archivo kubeconfig en el directorio que puede utilizarse para comunicarse con el clúster.
 Configuración
 La etapa de configuración configura ArgoCD para desplegar la aplicación desde un repositorio Git. ArgoCD implementa GitOps, sincronizando automáticamente los cambios del repositorio en el clúster de Kubernetes.
 Para configurar el despliegue:
-bash# Navegar al directorio de configuración
+Navegar al directorio de configuración
+```bash
 cd terraform/configuracion
-
-# Inicializar Terraform
+```
+Inicializar Terraform
+```bash
 terraform init
-
-# Ver los cambios que se aplicarán
+```
+## Ver los cambios que se aplicarán
+```bash
 terraform plan
-
-# Aplicar los cambios
+```
+## Aplicar los cambios
+```bash
 terraform apply
+```
 Instrucciones de despliegue
 
 Preparar el entorno:
-bash# Configurar Google Cloud CLI
+## Configurar Google Cloud CLI
+```bash
 gcloud auth login
 gcloud config set project despliegue-458304
+```
 
 Desplegar la infraestructura:
-bashcd terraform/infraestructura
+```bash
+cd terraform/infraestructura
 terraform init
 terraform apply
-
+```
 Configurar kubectl:
-bash# Usar el archivo kubeconfig generado
+## Usar el archivo kubeconfig generado
+```bash
 export KUBECONFIG=$(pwd)/kubeconfig
-# Verificar la conexión
+```
+## Verificar la conexión
+```bash
 kubectl get nodes
-
+```
 Configurar el despliegue con ArgoCD:
-bashcd ../configuracion
+
+```bash
+cd ../configuracion
 terraform init
 terraform apply
-
+```
 Acceder a ArgoCD:
-bash# Obtener la IP de ArgoCD
+## Obtener la IP de ArgoCD
+```bash
 kubectl get svc -n argocd argocd-server
-# Acceder vía navegador: https://<ARGOCD_IP>
+```
+## Acceder vía navegador: https://<ARGOCD_IP>
 
 Verificar el despliegue:
-bash# Verificar pods de la aplicación
+## Verificar pods de la aplicación
+```bash
 kubectl get pods -n despliegue-final-ns
+```
 
-
-Una vez completados estos pasos, la aplicación Flask estará desplegada en Google Cloud y gestionada por ArgoCD, que mantiene la sincronización con el repositorio de manifiestos de Kubernetes.ReintentarClaude puede cometer errores. Por favor, verifique las respuestas. 3.7 Sonnet
+Una vez completados estos pasos, la aplicación Flask estará desplegada en Google Cloud y gestionada por ArgoCD, que mantiene la sincronización con el repositorio de manifiestos de Kubernetes.
