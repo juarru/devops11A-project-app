@@ -104,32 +104,46 @@ docker-compose down
 
 ## Despliegue en Google Cloud
 
-El despliegue en Google Cloud se realiza mediante Terraform y se divide en dos etapas: infraestructura y configuración. Este enfoque permite una separación clara de responsabilidades, donde primero se crea la infraestructura básica y luego se configura la aplicación a desplegar.
-Infraestructura
-La etapa de infraestructura crea los siguientes recursos:
+Despliegue en Google Cloud
+Para realizar el despliegue en Google Cloud, primero necesitarás instalar algunas herramientas esenciales:
+Requisitos previos
 
-Cluster GKE (Google Kubernetes Engine)
-Namespace para ArgoCD
-Instalación de ArgoCD mediante Helm
-Namespace para la aplicación
-Namespace para Kafka (opcional)
+Google Cloud SDK:
 
-Para desplegar la infraestructura:
-bash# Navegar al directorio de infraestructura
-cd terraform/infraestructura
+Herramienta de línea de comandos para interactuar con Google Cloud
+Descargar e instalar Google Cloud SDK
 
-# Inicializar Terraform
-terraform init
 
-# Ver los cambios que se aplicarán
-terraform plan
+Terraform:
 
-# Aplicar los cambios
-terraform apply
-Después del despliegue, se generará un archivo kubeconfig en el directorio que puede utilizarse para comunicarse con el clúster desde la línea de comandos.
-Configuración
-La etapa de configuración configura ArgoCD para desplegar la aplicación desde un repositorio Git. ArgoCD seguirá el principio de GitOps, sincronizando automáticamente losReintentarISolo quiero la parte de google cloudEditarDespliegue en Google Cloud
-El despliegue en Google Cloud se realiza mediante Terraform y se divide en dos etapas: infraestructura y configuración. Este enfoque permite una separación clara de responsabilidades, donde primero se crea la infraestructura básica y luego se configura la aplicación a desplegar.
+Herramienta de infraestructura como código
+Descargar e instalar Terraform
+
+
+kubectl:
+
+Herramienta de línea de comandos para Kubernetes
+Puedes instalarlo con Google Cloud SDK: gcloud components install kubectl
+
+
+Cuenta en Google Cloud Platform:
+
+Necesitarás una cuenta con facturación activada
+Tener habilitadas las APIs necesarias:
+
+Kubernetes Engine API
+Container Registry API
+
+
+
+
+Permisos IAM adecuados:
+
+Rol Kubernetes Engine Admin
+Rol Service Account User
+
+
+
 Infraestructura
 La etapa de infraestructura crea los siguientes recursos:
 
