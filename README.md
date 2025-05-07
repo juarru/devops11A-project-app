@@ -103,3 +103,99 @@ docker-compose down
 ```
 
 ## Despliegue en Google Cloud
+
+El despliegue en Google Cloud se realiza mediante Terraform y se divide en dos etapas: infraestructura y configuración. Este enfoque permite una separación clara de responsabilidades, donde primero se crea la infraestructura básica y luego se configura la aplicación a desplegar.
+Infraestructura
+La etapa de infraestructura crea los siguientes recursos:
+
+Cluster GKE (Google Kubernetes Engine)
+Namespace para ArgoCD
+Instalación de ArgoCD mediante Helm
+Namespace para la aplicación
+Namespace para Kafka (opcional)
+
+Para desplegar la infraestructura:
+bash# Navegar al directorio de infraestructura
+cd terraform/infraestructura
+
+# Inicializar Terraform
+terraform init
+
+# Ver los cambios que se aplicarán
+terraform plan
+
+# Aplicar los cambios
+terraform apply
+Después del despliegue, se generará un archivo kubeconfig en el directorio que puede utilizarse para comunicarse con el clúster desde la línea de comandos.
+Configuración
+La etapa de configuración configura ArgoCD para desplegar la aplicación desde un repositorio Git. ArgoCD seguirá el principio de GitOps, sincronizando automáticamente losReintentarISolo quiero la parte de google cloudEditarDespliegue en Google Cloud
+El despliegue en Google Cloud se realiza mediante Terraform y se divide en dos etapas: infraestructura y configuración. Este enfoque permite una separación clara de responsabilidades, donde primero se crea la infraestructura básica y luego se configura la aplicación a desplegar.
+Infraestructura
+La etapa de infraestructura crea los siguientes recursos:
+
+Cluster GKE (Google Kubernetes Engine)
+Namespace para ArgoCD
+Instalación de ArgoCD mediante Helm
+Namespace para la aplicación
+
+Para desplegar la infraestructura:
+bash# Navegar al directorio de infraestructura
+cd terraform/infraestructura
+
+# Inicializar Terraform
+terraform init
+
+# Ver los cambios que se aplicarán
+terraform plan
+
+# Aplicar los cambios
+terraform apply
+Después del despliegue, se generará un archivo kubeconfig en el directorio que puede utilizarse para comunicarse con el clúster.
+Configuración
+La etapa de configuración configura ArgoCD para desplegar la aplicación desde un repositorio Git. ArgoCD implementa GitOps, sincronizando automáticamente los cambios del repositorio en el clúster de Kubernetes.
+Para configurar el despliegue:
+bash# Navegar al directorio de configuración
+cd terraform/configuracion
+
+# Inicializar Terraform
+terraform init
+
+# Ver los cambios que se aplicarán
+terraform plan
+
+# Aplicar los cambios
+terraform apply
+Instrucciones de despliegue
+
+Preparar el entorno:
+bash# Configurar Google Cloud CLI
+gcloud auth login
+gcloud config set project despliegue-458304
+
+Desplegar la infraestructura:
+bashcd terraform/infraestructura
+terraform init
+terraform apply
+
+Configurar kubectl:
+bash# Usar el archivo kubeconfig generado
+export KUBECONFIG=$(pwd)/kubeconfig
+# Verificar la conexión
+kubectl get nodes
+
+Configurar el despliegue con ArgoCD:
+bashcd ../configuracion
+terraform init
+terraform apply
+
+Acceder a ArgoCD:
+bash# Obtener la IP de ArgoCD
+kubectl get svc -n argocd argocd-server
+# Acceder vía navegador: https://<ARGOCD_IP>
+
+Verificar el despliegue:
+bash# Verificar pods de la aplicación
+kubectl get pods -n despliegue-final-ns
+
+
+Una vez completados estos pasos, la aplicación Flask estará desplegada en Google Cloud y gestionada por ArgoCD, que mantiene la sincronización con el repositorio de manifiestos de Kubernetes.ReintentarClaude puede cometer errores. Por favor, verifique las respuestas. 3.7 Sonnet
