@@ -86,11 +86,11 @@ variable "service_account" {
 variable "argocd_chart_version" {
   description = "Versión del chart de Helm para Argo CD"
   type        = string
-  default     = "5.51.4" // Actualiza a la versión más reciente según sea necesario
+  default     = "5.51.4" 
 }
 variable "app_namespace" {
   description = "Namespace para la aplicación gestionada por ArgoCD"
   type        = string
-  default     = "torcal-ml"
+  default     = "despliegue-final-ns"
 }
 

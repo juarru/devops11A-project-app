@@ -20,7 +20,7 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(data.google_container_cluster.my_cluster.master_auth[0].cluster_ca_certificate)
 }
 
-# Ahora puedes crear tu recurso de ArgoCD Application
+# Crear recurso de ArgoCD 
 resource "kubernetes_manifest" "argocd_application" {
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"

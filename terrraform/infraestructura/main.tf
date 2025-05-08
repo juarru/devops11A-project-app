@@ -3,7 +3,7 @@
 // Obtener información de la configuración del cliente de Google
 data "google_client_config" "default" {}
 
-// Crear un clúster de GKE
+// Crear clúster
 module "gke" {
   source                     = "terraform-google-modules/kubernetes-engine/google"
   project_id                 = var.project_id
@@ -84,11 +84,3 @@ data "kubernetes_service" "argocd_server" {
   depends_on = [helm_release.argocd]
 }
 
-// Crear namespace para Kafka
-resource "kubernetes_namespace" "kafka_system" {
-  metadata {
-    name = "kafka-system"
-  }
-
-  depends_on = [module.gke]
-}
