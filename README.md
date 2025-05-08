@@ -229,5 +229,3 @@ kubectl get pods -n despliegue-final-ns
 ```
 
 Una vez completados estos pasos, la aplicación Flask estará desplegada en Google Cloud y gestionada por ArgoCD, que mantiene la sincronización con el repositorio de manifiestos de Kubernetes.
-
-nuevo texto
